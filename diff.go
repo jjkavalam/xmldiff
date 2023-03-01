@@ -20,7 +20,7 @@ func (tg *Tag) diff(ctxStack *Stack, other *Tag, w io.StringWriter) error {
 	ctx = strings.Join(*ctxStack, ">")
 	if len(tg.Children) == 0 && len(other.Children) == 0 {
 		if tg.Value != other.Value {
-			_, err := w.WriteString(fmt.Sprintf("%s VALUE: '%s' is matched by '%s'\n", Bold(ctx), Red(tg.Value), Green(other.Value)))
+			_, err := w.WriteString(fmt.Sprintf("%s VALUE: '%s' is matched by '%s'\n", Bold(ctx), Red(shorten(tg.Value)), Green(shorten(other.Value))))
 			if err != nil {
 				return err
 			}
@@ -89,4 +89,11 @@ func (tg *Tag) diff(ctxStack *Stack, other *Tag, w io.StringWriter) error {
 		}
 	}
 	return nil
+}
+
+func shorten(s string) string {
+	if len(s) < OptionShortenValueDiffs {
+		return s
+	}
+	return s[:OptionShortenValueDiffs] + "..."
 }
