@@ -16,7 +16,8 @@ func TestDiff(t *testing.T) {
 
 	xmlData1 := `<x>
 
-<c><e>f</e></c>
+<c><e>hello 
+world</e></c>
 <b>hello</b>
 </x> `
 
@@ -59,7 +60,8 @@ func TestDiff(t *testing.T) {
 	t.Log(outBuf.String())
 
 	expected := `ROOT>x CHILD_COUNT: child counts differ 2 vs 3
-ROOT>x>c>e VALUE: 'f' is matched by 'g'
+ROOT>x>c>e VALUE: 'hello 
+world' is matched by 'g'
 ROOT>x REMOVED_TAG: b
 ROOT>x ADDED_TAG: d
 ROOT>x ADDED_TAG: d
