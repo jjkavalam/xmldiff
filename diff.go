@@ -48,12 +48,42 @@ func (tg *Tag) diff(ctxStack *Stack, other *Tag, w io.StringWriter) error {
 		}
 	}
 
-	l := len(tg.Children)
-	if len(other.Children) < l {
-		l = len(other.Children)
+	// diff children
+	unmatchedLeft := map[int]bool{}
+	for i := range tg.Children {
+		unmatchedLeft[i] = true
 	}
-	for i := 0; i < l; i++ {
-		err := tg.Children[i].diff(ctxStack, other.Children[i], w)
+
+	unmatchedRight := map[int]bool{}
+	for i := range other.Children {
+		unmatchedRight[i] = true
+	}
+
+	for i, ctg := range tg.Children {
+		// try to match with an unmatchedRight tag
+		for k := range unmatchedRight {
+			oTg := other.Children[k]
+			if ctg.Name == oTg.Name {
+				err := ctg.diff(ctxStack, oTg, w)
+				if err != nil {
+					return err
+				}
+				// since match is made; remove both from unmatched sets
+				delete(unmatchedRight, k)
+				delete(unmatchedLeft, i)
+				break
+			}
+		}
+	}
+
+	for k := range unmatchedLeft {
+		_, err := w.WriteString(fmt.Sprintf("%s REMOVED_TAG: %s\n", ctx, tg.Children[k].Name))
+		if err != nil {
+			return err
+		}
+	}
+	for k := range unmatchedRight {
+		_, err := w.WriteString(fmt.Sprintf("%s ADDED_TAG: %s\n", ctx, other.Children[k].Name))
 		if err != nil {
 			return err
 		}
