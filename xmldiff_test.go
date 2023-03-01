@@ -12,6 +12,7 @@ import (
 )
 
 func TestDiff(t *testing.T) {
+	t.Setenv("NO_COLOR", "true")
 
 	xmlData1 := `<x>
 
