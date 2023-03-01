@@ -16,3 +16,8 @@ func Parse(xmlData string) (*Tag, error)
 func (tg *Tag) String(w io.StringWriter) error
 func (tg *Tag) Diff(other *Tag, w io.StringWriter) error
 ```
+
+## Current known limitations
+
+- XML attributes are not parsed and hence ignored when diffing
+- Comments, directives etc. are also ignored
