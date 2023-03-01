@@ -16,6 +16,7 @@ func (tg *Tag) diff(ctxStack *Stack, other *Tag, w io.StringWriter) error {
 		return nil
 	}
 	ctxStack.Push(tg.Name)
+	defer ctxStack.Pop()
 	ctx = strings.Join(*ctxStack, ">")
 	if len(tg.Children) == 0 && len(other.Children) == 0 {
 		if tg.Value != other.Value {
@@ -57,6 +58,5 @@ func (tg *Tag) diff(ctxStack *Stack, other *Tag, w io.StringWriter) error {
 			return err
 		}
 	}
-	ctxStack.Pop()
 	return nil
 }

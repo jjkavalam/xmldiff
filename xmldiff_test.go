@@ -1,7 +1,9 @@
 package xmldiff_test
 
 import (
+	"bytes"
 	"fmt"
+	"github.com/stretchr/testify/assert"
 	"log"
 	"os"
 	"testing"
@@ -13,11 +15,15 @@ func TestDiff(t *testing.T) {
 
 	xmlData1 := `<x>
 
+<c><e>f</e></c>
 <b>hello</b>
-<c></c>
 </x> `
 
-	xmlData2 := `<a><c></c></a>`
+	xmlData2 := `<x>
+<c><e>g</e>
+</c>
+<d></d>
+</x>`
 
 	t1, err := xmldiff.Parse(xmlData1)
 	if err != nil {
@@ -43,8 +49,18 @@ func TestDiff(t *testing.T) {
 
 	fmt.Println("\n---")
 
-	err = t1.Diff(t2, os.Stdout)
+	var outBuf bytes.Buffer
+	err = t1.Diff(t2, &outBuf)
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	t.Log(outBuf.String())
+
+	expected := `ROOT>x>c>e VALUE: 'f' is matched by 'g'
+ROOT>x TAG: 'b' is matched by 'd'
+`
+
+	assert.Equal(t, expected, outBuf.String())
+
 }
