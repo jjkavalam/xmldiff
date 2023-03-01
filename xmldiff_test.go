@@ -9,7 +9,7 @@ import (
 	"github.com/jjkavalam/xmldiff"
 )
 
-func TestMain(t *testing.T) {
+func TestDiff(t *testing.T) {
 
 	xmlData1 := `<x>
 

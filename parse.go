@@ -21,9 +21,22 @@ func NewParser(xmlData string) *parser {
 	}
 }
 
+func (p *parser) token() (xml.Token, error) {
+	t, err := p.dec.Token()
+
+	// skip special tokens
+	switch t.(type) {
+	case xml.ProcInst, xml.Comment, xml.Directive:
+		return p.token()
+	}
+
+	return t, err
+
+}
+
 func (p *parser) peek() (xml.Token, error) {
 	if p.next == nil {
-		p.next, p.nextErr = p.dec.Token()
+		p.next, p.nextErr = p.token()
 	}
 	return p.next, p.nextErr
 }
@@ -35,7 +48,7 @@ func (p *parser) pop() (xml.Token, error) {
 		p.nextErr = nil
 		return t, err
 	}
-	return p.dec.Token()
+	return p.token()
 }
 
 // ParseTag converts a stream of tokens into a tree structure,
