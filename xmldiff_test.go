@@ -24,7 +24,7 @@ func TestFind(t *testing.T) {
 
 	v := tag.Find([]string{"c"})
 
-	if v != "hello" {
+	if v.Value != "hello" {
 		t.Fatalf("expected '%s', got '%s'", "hello", v)
 	}
 

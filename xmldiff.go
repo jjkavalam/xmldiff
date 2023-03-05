@@ -51,10 +51,10 @@ func (tg *Tag) Diff(other *Tag, w io.StringWriter) (bool, error) {
 }
 
 // Find locates the value identified by the path
-// Given: <a>x</a>, a.Find({"a"}) returns "x"
-func (tg *Tag) Find(path []string) string {
+// Given: <a>x</a>, a.Find({"a"}) returns *Tag<a>
+func (tg *Tag) Find(path []string) *Tag {
 	if len(path) == 0 {
-		return tg.Value
+		return tg
 	}
 
 	child := path[0]
@@ -64,5 +64,5 @@ func (tg *Tag) Find(path []string) string {
 		}
 	}
 
-	return ""
+	return nil
 }
