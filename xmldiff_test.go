@@ -11,6 +11,25 @@ import (
 	"github.com/jjkavalam/xmldiff"
 )
 
+func TestFind(t *testing.T) {
+
+	data := `<a>
+<c>hello</c>
+</a> `
+	tag, err := xmldiff.Parse(data)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	v := tag.Find([]string{"c"})
+
+	if v != "hello" {
+		t.Fatalf("expected '%s', got '%s'", "hello", v)
+	}
+
+}
+
 func TestDiff(t *testing.T) {
 	t.Setenv("NO_COLOR", "true")
 

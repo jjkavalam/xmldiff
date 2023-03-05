@@ -49,3 +49,20 @@ func (tg *Tag) Diff(other *Tag, w io.StringWriter) error {
 	s.Push("ROOT")
 	return tg.diff(s, other, w)
 }
+
+// Find locates the value identified by the path
+// Given: <a>x</a>, a.Find({"a"}) returns "x"
+func (tg *Tag) Find(path []string) string {
+	if len(path) == 0 {
+		return tg.Value
+	}
+
+	child := path[0]
+	for _, ct := range tg.Children {
+		if ct.Name == child {
+			return ct.Find(path[1:])
+		}
+	}
+
+	return ""
+}
