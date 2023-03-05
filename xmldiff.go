@@ -44,7 +44,7 @@ func (tg *Tag) String(w io.StringWriter) error {
 
 // Diff compares this tag with another.
 // It performs a tree traversal on both trees simultaneously and returns a list of differences between the trees.
-func (tg *Tag) Diff(other *Tag, w io.StringWriter) error {
+func (tg *Tag) Diff(other *Tag, w io.StringWriter) (bool, error) {
 	s := NewStack()
 	s.Push("ROOT")
 	return tg.diff(s, other, w)

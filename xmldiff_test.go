@@ -71,9 +71,13 @@ world</e></c>
 	fmt.Println("\n---")
 
 	var outBuf bytes.Buffer
-	err = t1.Diff(t2, &outBuf)
+	hasDiff, err := t1.Diff(t2, &outBuf)
 	if err != nil {
 		log.Fatal(err)
+	}
+
+	if !hasDiff {
+		t.Fatal("expected hasDiff to be true")
 	}
 
 	t.Log(outBuf.String())
