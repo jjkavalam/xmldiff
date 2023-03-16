@@ -3,7 +3,6 @@ package xmldiff_test
 import (
 	"bytes"
 	"fmt"
-	"github.com/stretchr/testify/assert"
 	"log"
 	"os"
 	"testing"
@@ -95,6 +94,8 @@ world' does not match 'g'
  ADDED_TAG: d
 `
 
-	assert.Equal(t, expected, outBuf.String())
+	if expected != outBuf.String() {
+		t.Fatalf("want '%s', got '%s'", expected, outBuf.String())
+	}
 
 }
