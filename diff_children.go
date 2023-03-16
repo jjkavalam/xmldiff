@@ -5,7 +5,7 @@ import (
 	"io"
 )
 
-func diffChildren(ctxStack *Stack, this []*Tag, that []*Tag, w io.StringWriter) (hasDiff bool, err error) {
+func diffChildren(ctxStack *Stack, this []*Tag, that []*Tag, w io.StringWriter) (hasDiff bool) {
 	// two sections that have the same name identify points in the script that needs to match
 	compareFn := func(a, b *Tag) bool {
 		return a.Name == b.Name
@@ -35,10 +35,7 @@ func diffChildren(ctxStack *Stack, this []*Tag, that []*Tag, w io.StringWriter) 
 			if compareFn(this[i], common[k]) {
 				break
 			}
-			_, err = w.WriteString(removedTag(this[i]))
-			if err != nil {
-				return
-			}
+			must(w.WriteString(removedTag(this[i])))
 			hasDiff = true
 		}
 
@@ -46,19 +43,13 @@ func diffChildren(ctxStack *Stack, this []*Tag, that []*Tag, w io.StringWriter) 
 			if compareFn(that[j], common[k]) {
 				break
 			}
-			_, err = w.WriteString(addedTag(that[j]))
-			if err != nil {
-				return
-			}
+			must(w.WriteString(addedTag(that[j])))
 			hasDiff = true
 		}
 
 		if i < len(this) && j < len(that) {
 			// compare
-			hasDiff2, err = this[i].diff(ctxStack, that[j], w)
-			if err != nil {
-				return
-			}
+			hasDiff2 = this[i].diff(ctxStack, that[j], w)
 			if hasDiff2 {
 				// the difference would have been already written into w
 				hasDiff = true
@@ -73,20 +64,14 @@ func diffChildren(ctxStack *Stack, this []*Tag, that []*Tag, w io.StringWriter) 
 	}
 
 	for ; i < len(this); i++ {
-		_, err = w.WriteString(removedTag(this[i]))
-		if err != nil {
-			return
-		}
+		must(w.WriteString(removedTag(this[i])))
 		hasDiff = true
 	}
 
 	for ; j < len(that); j++ {
-		_, err = w.WriteString(addedTag(that[j]))
-		if err != nil {
-			return
-		}
+		must(w.WriteString(addedTag(that[j])))
 		hasDiff = true
 	}
 
-	return hasDiff, nil
+	return hasDiff
 }

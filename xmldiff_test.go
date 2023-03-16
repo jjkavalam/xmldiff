@@ -50,10 +50,7 @@ world</e></c>
 		log.Fatal(err)
 	}
 
-	err = t1.String(os.Stdout)
-	if err != nil {
-		log.Fatal(err)
-	}
+	t1.String(os.Stdout)
 
 	fmt.Println("\n---")
 
@@ -62,18 +59,12 @@ world</e></c>
 		log.Fatal(err)
 	}
 
-	err = t2.String(os.Stdout)
-	if err != nil {
-		log.Fatal(err)
-	}
+	t2.String(os.Stdout)
 
 	fmt.Println("\n---")
 
 	var outBuf bytes.Buffer
-	hasDiff, err := t1.Diff(t2, &outBuf)
-	if err != nil {
-		log.Fatal(err)
-	}
+	hasDiff := t1.Diff(t2, &outBuf)
 
 	if !hasDiff {
 		t.Fatal("expected hasDiff to be true")

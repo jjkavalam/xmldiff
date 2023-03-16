@@ -17,34 +17,21 @@ type Tag struct {
 	Value string
 }
 
-func (tg *Tag) String(w io.StringWriter) error {
-	_, err := w.WriteString(fmt.Sprintf("<%s>", tg.Name))
-	if err != nil {
-		return err
-	}
+func (tg *Tag) String(w io.StringWriter) {
+	must(w.WriteString(fmt.Sprintf("<%s>", tg.Name)))
 	if len(tg.Children) == 0 {
-		_, err = w.WriteString(tg.Value)
-		if err != nil {
-			return err
-		}
+		must(w.WriteString(tg.Value))
 	} else {
 		for _, ctg := range tg.Children {
-			err = ctg.String(w)
-			if err != nil {
-				return err
-			}
+			ctg.String(w)
 		}
 	}
-	_, err = w.WriteString(fmt.Sprintf("</%s>", tg.Name))
-	if err != nil {
-		return err
-	}
-	return nil
+	must(w.WriteString(fmt.Sprintf("</%s>", tg.Name)))
 }
 
 // Diff compares this tag with another.
 // It performs a tree traversal on both trees simultaneously and returns a list of differences between the trees.
-func (tg *Tag) Diff(other *Tag, w io.StringWriter) (bool, error) {
+func (tg *Tag) Diff(other *Tag, w io.StringWriter) bool {
 	s := NewStack()
 	s.Push("ROOT")
 	return tg.diff(s, other, w)
