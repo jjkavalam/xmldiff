@@ -83,13 +83,13 @@ world</e></c>
 
 	expected := `[ROOT>x]
  CHILD_COUNT: child counts differ 2 vs 3
+[ROOT>x]
+ ADDED_TAG: d
 [ROOT>x>c>e]
  VALUE: 'hello 
 world' does not match 'g'
 [ROOT>x]
  REMOVED_TAG: b
-[ROOT>x]
- ADDED_TAG: d
 [ROOT>x]
  ADDED_TAG: d
 `
