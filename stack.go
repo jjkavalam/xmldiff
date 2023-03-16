@@ -1,5 +1,10 @@
 package xmldiff
 
+import (
+	"fmt"
+	"strings"
+)
+
 type Stack []string
 
 func (s *Stack) Push(item string) {
@@ -13,6 +18,10 @@ func (s *Stack) Pop() string {
 	item := (*s)[len(*s)-1]
 	*s = (*s)[:len(*s)-1]
 	return item
+}
+
+func (s *Stack) String() string {
+	return fmt.Sprintf("[%s]\n", strings.Join(*s, ">"))
 }
 
 func NewStack() *Stack {

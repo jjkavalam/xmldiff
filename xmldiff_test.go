@@ -82,12 +82,17 @@ world</e></c>
 
 	t.Log(outBuf.String())
 
-	expected := `ROOT>x CHILD_COUNT: child counts differ 2 vs 3
-ROOT>x>c>e VALUE: 'hello 
-world' is matched by 'g'
-ROOT>x REMOVED_TAG: b
-ROOT>x ADDED_TAG: d
-ROOT>x ADDED_TAG: d
+	expected := `[ROOT>x]
+ CHILD_COUNT: child counts differ 2 vs 3
+[ROOT>x>c>e]
+ VALUE: 'hello 
+world' does not match 'g'
+[ROOT>x]
+ REMOVED_TAG: b
+[ROOT>x]
+ ADDED_TAG: d
+[ROOT>x]
+ ADDED_TAG: d
 `
 
 	assert.Equal(t, expected, outBuf.String())
