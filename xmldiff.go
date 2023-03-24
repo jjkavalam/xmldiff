@@ -6,7 +6,7 @@ import (
 )
 
 func Parse(xmlData string) (*Tag, error) {
-	p := NewParser(xmlData)
+	p := newParser(xmlData)
 	return p.ParseTag()
 }
 

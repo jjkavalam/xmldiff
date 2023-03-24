@@ -14,7 +14,7 @@ type parser struct {
 	nextErr error
 }
 
-func NewParser(xmlData string) *parser {
+func newParser(xmlData string) *parser {
 	dec := xml.NewDecoder(bytes.NewBufferString(xmlData))
 	return &parser{
 		dec: dec,
@@ -134,19 +134,26 @@ func (p *parser) ParseTag() (*Tag, error) {
 // takeWhitespace checks if next token is an empty whitespace
 // it consumes that token and returns if so; otherwise does not consume the token.
 func (p *parser) takeWhiteSpace() error {
-	t, err := p.peek()
+	// keep consuming tokens as long as they are empty whitespaces
+	// why would two whitespace tokens come one after the another rather than as one combined token ?
+	// Because, there could be other "special" tokens in between ! (see p.token() for details)
+	for {
+		t, err := p.peek()
 
-	if err != nil {
-		return err
-	}
+		if err != nil {
+			return err
+		}
 
-	if t, ok := t.(xml.CharData); ok {
-		s := string(t)
-		if strings.TrimSpace(s) == "" {
-			_, _ = p.pop()
-			return nil
+		if t, ok := t.(xml.CharData); ok {
+			s := string(t)
+			if strings.TrimSpace(s) == "" {
+				_, _ = p.pop()
+			} else {
+				break
+			}
+		} else {
+			break
 		}
 	}
-
 	return nil
 }

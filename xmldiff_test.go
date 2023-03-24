@@ -12,7 +12,9 @@ import (
 
 func TestFind(t *testing.T) {
 
-	data := `<a>
+	data := `
+<?xml version="1.0" encoding="utf-8"?>
+<a>
 <c>hello</c>
 </a> `
 	tag, err := xmldiff.Parse(data)
