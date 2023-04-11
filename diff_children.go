@@ -5,7 +5,7 @@ import (
 	"io"
 )
 
-func diffChildren(ctxStack *Stack, this []*Tag, that []*Tag, w io.StringWriter) (hasDiff bool) {
+func diffChildren(ctxStack *stack, this []*Tag, that []*Tag, w io.StringWriter) (hasDiff bool) {
 	// two sections that have the same name identify points in the script that needs to match
 	compareFn := func(a, b *Tag) bool {
 		return a.Name == b.Name
@@ -22,11 +22,11 @@ func diffChildren(ctxStack *Stack, this []*Tag, that []*Tag, w io.StringWriter) 
 	var hasDiff2 = false
 
 	removedTag := func(t *Tag) string {
-		return fmt.Sprintf("%s REMOVED_TAG: %s\n", Bold(ctxStack.String()), Red(t.Name))
+		return fmt.Sprintf("%s REMOVED_TAG: %s\n", bold(ctxStack.String()), red(t.Name))
 	}
 
 	addedTag := func(t *Tag) string {
-		return fmt.Sprintf("%s ADDED_TAG: %s\n", Bold(ctxStack.String()), Green(t.Name))
+		return fmt.Sprintf("%s ADDED_TAG: %s\n", bold(ctxStack.String()), green(t.Name))
 	}
 
 	for k := range common {

@@ -7,7 +7,7 @@ import (
 
 func Parse(xmlData string) (*Tag, error) {
 	p := newParser(xmlData)
-	return p.ParseTag()
+	return p.parseTag()
 }
 
 type Tag struct {
@@ -32,8 +32,8 @@ func (tg *Tag) String(w io.StringWriter) {
 // Diff compares this tag with another.
 // It performs a tree traversal on both trees simultaneously and returns a list of differences between the trees.
 func (tg *Tag) Diff(other *Tag, w io.StringWriter) bool {
-	s := NewStack()
-	s.Push("ROOT")
+	s := newStack()
+	s.push("ROOT")
 	return tg.diff(s, other, w)
 }
 

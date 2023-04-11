@@ -1,19 +1,18 @@
-package xmldiff_test
+package xmldiff
 
 import (
-	"github.com/jjkavalam/xmldiff"
 	"strings"
 	"testing"
 )
 
 func TestStack(t *testing.T) {
-	s := xmldiff.NewStack()
+	s := newStack()
 
-	s.Push("a")
-	s.Push("b")
-	s.Push("c")
-	s.Pop()
-	s.Push("d")
+	s.push("a")
+	s.push("b")
+	s.push("c")
+	s.pop()
+	s.push("d")
 
 	if strings.Join(*s, ":") != "a:b:d" {
 		t.Errorf("want 'a:b:d'; got %s", *s)

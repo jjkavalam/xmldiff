@@ -51,10 +51,10 @@ func (p *parser) pop() (xml.Token, error) {
 	return p.token()
 }
 
-// ParseTag converts a stream of tokens into a tree structure,
+// parseTag converts a stream of tokens into a tree structure,
 // using a parsing technique called "recursive descent parsing".
 // Each parsing function takes a stream of tokens as input and return a tree structure.
-func (p *parser) ParseTag() (*Tag, error) {
+func (p *parser) parseTag() (*Tag, error) {
 
 	tg := &Tag{
 		Children: make([]*Tag, 0),
@@ -105,7 +105,7 @@ func (p *parser) ParseTag() (*Tag, error) {
 				// exit loop parsing child elements on finding an unmatched end element
 				break
 			}
-			ctg, err := p.ParseTag()
+			ctg, err := p.parseTag()
 			if err != nil {
 				return nil, err
 			}

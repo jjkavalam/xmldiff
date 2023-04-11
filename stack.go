@@ -5,13 +5,13 @@ import (
 	"strings"
 )
 
-type Stack []string
+type stack []string
 
-func (s *Stack) Push(item string) {
+func (s *stack) push(item string) {
 	*s = append(*s, item)
 }
 
-func (s *Stack) Pop() string {
+func (s *stack) pop() string {
 	if len(*s) == 0 {
 		return ""
 	}
@@ -20,11 +20,11 @@ func (s *Stack) Pop() string {
 	return item
 }
 
-func (s *Stack) String() string {
+func (s *stack) String() string {
 	return fmt.Sprintf("[%s]\n", strings.Join(*s, ">"))
 }
 
-func NewStack() *Stack {
-	s := Stack([]string{})
+func newStack() *stack {
+	s := stack([]string{})
 	return &s
 }
