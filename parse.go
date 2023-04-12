@@ -73,7 +73,11 @@ func (p *parser) parseTag() (*Tag, error) {
 	}
 
 	if tt, ok := t.(xml.StartElement); !ok {
-		return nil, fmt.Errorf("expected start element; found %+v", t)
+		var s string
+		if tt, ok := t.(xml.CharData); ok {
+			s = string(tt)
+		}
+		return nil, fmt.Errorf("expected start element; found %T '%s'", t, s)
 	} else {
 		tg.Name = tt.Name.Local
 	}
