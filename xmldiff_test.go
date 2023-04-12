@@ -49,7 +49,7 @@ world</e></c>
 <c><e>g</e>
 </c><d>ok</d>
 <e><g></g></e>
-<f></f>
+<f>xyz</f>
 </x>
 `
 
@@ -90,9 +90,9 @@ world' does not match 'g'
 [ROOT>x]
  ADDED_TAG: d
 [ROOT>x>e]
- VALUE: '<e></e>' does not match '<e><g></g></e>'
+ VALUE: '' does not match '<g></g>'
 [ROOT>x>f]
- CHILD_TAGS: '<f><g></g></f>' does not match '<f></f>'
+ CHILD_TAGS: '<g></g>' does not match 'xyz'
 `
 
 	actual := outBuf.String()

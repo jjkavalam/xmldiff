@@ -22,20 +22,16 @@ func (tg *Tag) diff(ctxStack *stack, other *Tag, w io.StringWriter) (hasDiff boo
 		return
 	}
 	if len(tg.Children) == 0 {
-		var left bytes.Buffer
-		tg.String(&left)
 		var right bytes.Buffer
-		other.String(&right)
-		must(w.WriteString(fmt.Sprintf("%s VALUE: '%s' does not match '%s'\n", bold(ctxStack.String()), red(left.String()), green(right.String()))))
+		other.StringChildrenOnly(&right)
+		must(w.WriteString(fmt.Sprintf("%s VALUE: '%s' does not match '%s'\n", bold(ctxStack.String()), red(tg.Value), green(right.String()))))
 		hasDiff = true
 		return
 	}
 	if len(other.Children) == 0 {
 		var left bytes.Buffer
-		tg.String(&left)
-		var right bytes.Buffer
-		other.String(&right)
-		must(w.WriteString(fmt.Sprintf("%s CHILD_TAGS: '%s' does not match '%s'\n", bold(ctxStack.String()), red(left.String()), green(right.String()))))
+		tg.StringChildrenOnly(&left)
+		must(w.WriteString(fmt.Sprintf("%s CHILD_TAGS: '%s' does not match '%s'\n", bold(ctxStack.String()), red(left.String()), green(other.Value))))
 		hasDiff = true
 		return
 	}

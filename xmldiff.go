@@ -17,14 +17,21 @@ type Tag struct {
 	Value string
 }
 
+func (tg *Tag) StringChildrenOnly(w io.StringWriter) {
+	if len(tg.Children) == 0 {
+		return
+	}
+	for _, ctg := range tg.Children {
+		ctg.String(w)
+	}
+}
+
 func (tg *Tag) String(w io.StringWriter) {
 	must(w.WriteString(fmt.Sprintf("<%s>", tg.Name)))
 	if len(tg.Children) == 0 {
 		must(w.WriteString(tg.Value))
 	} else {
-		for _, ctg := range tg.Children {
-			ctg.String(w)
-		}
+		tg.StringChildrenOnly(w)
 	}
 	must(w.WriteString(fmt.Sprintf("</%s>", tg.Name)))
 }
