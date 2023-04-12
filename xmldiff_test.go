@@ -39,13 +39,19 @@ func TestDiff(t *testing.T) {
 <c><e>hello 
 world</e></c>
 <b>hello</b>
+<e></e>
+<f><g></g></f>
 </x> `
 
 	xmlData2 := `<x>
 
 <d></d>
 <c><e>g</e>
-</c><d>ok</d></x>`
+</c><d>ok</d>
+<e><g></g></e>
+<f></f>
+</x>
+`
 
 	t1, err := xmldiff.Parse(xmlData1)
 	if err != nil {
@@ -72,10 +78,8 @@ world</e></c>
 		t.Fatal("expected hasDiff to be true")
 	}
 
-	t.Log(outBuf.String())
-
 	expected := `[ROOT>x]
- CHILD_COUNT: child counts differ 2 vs 3
+ CHILD_COUNT: child counts differ 4 vs 5
 [ROOT>x]
  ADDED_TAG: d
 [ROOT>x>c>e]
@@ -85,10 +89,15 @@ world' does not match 'g'
  REMOVED_TAG: b
 [ROOT>x]
  ADDED_TAG: d
+[ROOT>x>e]
+ VALUE: '<e></e>' does not match '<e><g></g></e>'
+[ROOT>x>f]
+ CHILD_TAGS: '<f><g></g></f>' does not match '<f></f>'
 `
 
-	if expected != outBuf.String() {
-		t.Fatalf("want '%s', got '%s'", expected, outBuf.String())
+	actual := outBuf.String()
+	if expected != actual {
+		t.Fatalf("want '%s', got '%s'", expected, actual)
 	}
 
 }

@@ -1,6 +1,7 @@
 package xmldiff
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 )
@@ -21,12 +22,20 @@ func (tg *Tag) diff(ctxStack *stack, other *Tag, w io.StringWriter) (hasDiff boo
 		return
 	}
 	if len(tg.Children) == 0 {
-		must(w.WriteString(fmt.Sprintf("%s VALUE: '%s' does not match tag <%s>\n", bold(ctxStack.String()), red(tg.Value), green(other.Name))))
+		var left bytes.Buffer
+		tg.String(&left)
+		var right bytes.Buffer
+		other.String(&right)
+		must(w.WriteString(fmt.Sprintf("%s VALUE: '%s' does not match '%s'\n", bold(ctxStack.String()), red(left.String()), green(right.String()))))
 		hasDiff = true
 		return
 	}
 	if len(other.Children) == 0 {
-		must(w.WriteString(fmt.Sprintf("%s CHILD_TAGS: <%s>'s child tags are matched by a value '%s'\n", bold(ctxStack.String()), red(tg.Name), green(other.Value))))
+		var left bytes.Buffer
+		tg.String(&left)
+		var right bytes.Buffer
+		other.String(&right)
+		must(w.WriteString(fmt.Sprintf("%s CHILD_TAGS: '%s' does not match '%s'\n", bold(ctxStack.String()), red(left.String()), green(right.String()))))
 		hasDiff = true
 		return
 	}
