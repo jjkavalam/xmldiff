@@ -81,14 +81,14 @@ world</e></c>
 	expected := `[ROOT>x]
  CHILD_COUNT: child counts differ 4 vs 5
 [ROOT>x]
- ADDED_TAG: d
+ ADDED_TAG: d (found at position 0)
 [ROOT>x>c>e]
  VALUE: 'hello 
 world' does not match 'g'
 [ROOT>x]
- REMOVED_TAG: b
+ REMOVED_TAG: b (expected at position 1)
 [ROOT>x]
- ADDED_TAG: d
+ ADDED_TAG: d (found at position 2)
 [ROOT>x>e]
  VALUE: '' does not match '<g></g>'
 [ROOT>x>f]

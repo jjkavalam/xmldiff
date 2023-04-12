@@ -21,12 +21,14 @@ func diffChildren(ctxStack *stack, this []*Tag, that []*Tag, w io.StringWriter) 
 
 	var hasDiff2 = false
 
-	removedTag := func(t *Tag) string {
-		return fmt.Sprintf("%s REMOVED_TAG: %s\n", bold(ctxStack.String()), red(t.Name))
+	removedTag := func(i int) string {
+		t := this[i]
+		return fmt.Sprintf("%s REMOVED_TAG: %s (expected at position %d)\n", bold(ctxStack.String()), red(t.Name), i)
 	}
 
-	addedTag := func(t *Tag) string {
-		return fmt.Sprintf("%s ADDED_TAG: %s\n", bold(ctxStack.String()), green(t.Name))
+	addedTag := func(j int) string {
+		t := that[j]
+		return fmt.Sprintf("%s ADDED_TAG: %s (found at position %d)\n", bold(ctxStack.String()), green(t.Name), j)
 	}
 
 	for k := range common {
@@ -35,7 +37,7 @@ func diffChildren(ctxStack *stack, this []*Tag, that []*Tag, w io.StringWriter) 
 			if compareFn(this[i], common[k]) {
 				break
 			}
-			must(w.WriteString(removedTag(this[i])))
+			must(w.WriteString(removedTag(i)))
 			hasDiff = true
 		}
 
@@ -43,7 +45,7 @@ func diffChildren(ctxStack *stack, this []*Tag, that []*Tag, w io.StringWriter) 
 			if compareFn(that[j], common[k]) {
 				break
 			}
-			must(w.WriteString(addedTag(that[j])))
+			must(w.WriteString(addedTag(j)))
 			hasDiff = true
 		}
 
@@ -64,12 +66,12 @@ func diffChildren(ctxStack *stack, this []*Tag, that []*Tag, w io.StringWriter) 
 	}
 
 	for ; i < len(this); i++ {
-		must(w.WriteString(removedTag(this[i])))
+		must(w.WriteString(removedTag(i)))
 		hasDiff = true
 	}
 
 	for ; j < len(that); j++ {
-		must(w.WriteString(addedTag(that[j])))
+		must(w.WriteString(addedTag(j)))
 		hasDiff = true
 	}
 
